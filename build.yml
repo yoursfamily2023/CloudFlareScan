@@ -1,4 +1,4 @@
-name: 打包 Cloudflare Scan EXE
+name: 打包 Cloudflare Scan EXE (带图标)
 
 on:
   push:
@@ -22,18 +22,19 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
-        pip install -r requirements.txt
+        # 这里使用你代码中实际需要的依赖，基于你的代码，是 PySide6 和 aiohttp
+        pip install PySide6 aiohttp
 
     - name: 使用 PyInstaller 打包
       run: |
         # --onefile: 生成单个 exe
         # --noconsole: GUI 程序不显示命令行窗口
-        # --icon: 指定图标（确保仓库里有 cfs.ico，否则删掉这行）
+        # --icon: 指定你的图标文件 (必须在仓库根目录下存在 cfs.ico)
         # --name: 指定生成的 exe 文件名
         pyinstaller --onefile --noconsole --icon="cfs.ico" --name "CloudflareScan" main.py
 
     - name: 上传成品
       uses: actions/upload-artifact@v4
       with:
-        name: CloudflareScan-Windows
+        name: CloudflareScan-Windows-with-Icon
         path: dist/*.exe
